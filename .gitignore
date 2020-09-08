@@ -1,0 +1,9 @@
+target/
+bin/
+medius-discord-bot.jar
+config.json
+.settings/
+.project
+.classpath
+*.swp
+*.tmp

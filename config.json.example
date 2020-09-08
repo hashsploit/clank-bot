@@ -1,0 +1,19 @@
+{
+	"log_level": "INFO",
+	"token": "",
+	"prefix": "!",
+	"operators": [
+		000000000000000000,
+		123456789012345678
+	],
+	"servers": [
+		{
+			"name": "dl",
+			"description": "Deadlocked",
+			"address": "127.0.0.1",
+			"port": 10093,
+			"token": "super secret token",
+			"color": 8912896
+		},
+	]
+}
