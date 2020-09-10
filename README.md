@@ -65,6 +65,11 @@ While all required parameters are defined with **<angle brackets>**.
 - `kick <server name> <player>` - Kick a player from the server.
 
 
+## Building/Compiling
+
+To build the project simply use `./build.sh` and to run the project use `./launch.sh`.
+
+
 ## JSON Query Messages Protocol
 
 The communication protocol between the Medius Lobby Server component and the bot use JSON query messages.
