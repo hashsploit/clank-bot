@@ -65,7 +65,7 @@ public class MessageListener extends ListenerAdapter {
 			if (cmd.getName().equals(command)) {
 				
 				// Check permissions
-				if (cmd.isOperatorCommand() && !isOperator(event.getAuthor().getIdLong())) {
+				if (cmd.isOperatorCommand() && !MediusBot.getInstance().isOperator(event.getAuthor().getIdLong())) {
 					return;
 				}
 				
@@ -81,20 +81,6 @@ public class MessageListener extends ListenerAdapter {
 				cmd.onFire(cmdEvent);
 			}
 		}
-	}
-	
-	/**
-	 * Check if a Discord Client Id is an operator.
-	 * @param discordId
-	 * @return
-	 */
-	private boolean isOperator(long discordId) {
-		for (long id : MediusBot.getInstance().getConfig().getOperators()) {
-			if (id == discordId) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }
