@@ -1,8 +1,6 @@
 package net.hashsploit.mediusdiscordbot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,20 +15,25 @@ public class MessageListener extends ListenerAdapter {
 	
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		
+
+		boolean isFromPM = event.isFromType(ChannelType.PRIVATE);
+		boolean isBotMessage = event.getAuthor().getIdLong() == event.getJDA().getSelfUser().getIdLong();
+		boolean isMention = event.getMessage().getContentDisplay().startsWith("@" + event.getJDA().getSelfUser().getName());
+		boolean usesPrefix = event.getMessage().getContentRaw().startsWith(MediusBot.getInstance().getConfig().getPrefix());
+
 		// Log PM's and exit
-		if (event.isFromType(ChannelType.PRIVATE)) {
+		if (isFromPM) {
 			logger.info(String.format("[PM] %s: %s\n", event.getAuthor().getName(), event.getMessage().getContentDisplay()));
 			return;
 		}
-		
+
 		// Do not fire on our own messages
-		if (event.getAuthor().getIdLong() == event.getJDA().getSelfUser().getIdLong()) {
+		if (isBotMessage) {
 			return;
 		}
 		
 		// Parse by @mention
-		if (event.getMessage().getContentDisplay().startsWith("@" + event.getJDA().getSelfUser().getName())) {
+		if (isMention) {
 			final String message = event.getMessage().getContentDisplay().split("@" + event.getJDA().getSelfUser().getName())[1].trim();
 			final String[] parts = message.split(" ");
 			final String command = parts[0];
@@ -40,7 +43,7 @@ public class MessageListener extends ListenerAdapter {
 		}
 		
 		// Parse by prefix
-		if (event.getMessage().getContentRaw().startsWith(MediusBot.getInstance().getConfig().getPrefix())) {
+		if (usesPrefix) {
 			final String message = event.getMessage().getContentDisplay().split(MediusBot.getInstance().getConfig().getPrefix())[1];
 			final String[] parts = message.split(" ");
 			final String command = parts[0];
@@ -48,7 +51,20 @@ public class MessageListener extends ListenerAdapter {
 			
 			handleCommand(event, command, args);
 		}
-		
+
+		// Parse remaining messages and search for server status related inquiries
+		if (!isFromPM && !isBotMessage && !isMention && !usesPrefix){
+			HashSet<String> messageWords = new HashSet<String>(Arrays.asList(event.getMessage().getContentRaw().split(" ")));
+
+			if (!Collections.disjoint(messageWords, MediusBot.getInstance().getConfig().getFaqWords())) {
+				final String command = "serverStatus";
+				final String[] args = new String[]{"parsed"};
+
+				handleCommand(event, command, args);
+			}
+
+		}
+
 	}
 	
 	/**
