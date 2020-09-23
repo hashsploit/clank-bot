@@ -49,8 +49,36 @@ public class CommandEvent {
 		return null;
 	}
 
-	public ArrayList<String> getArguments() {
-		return arguments;
+	/**
+	 * Get the user/issuer of the command.
+	 * @return
+	 */
+	public User getIssuer() {
+		return issuer;
 	}
 
+	/**
+	 * Get the current channel.
+	 * @return
+	 */
+	public MessageChannel getChannel() {
+		return channel;
+	}
+
+	/**
+	 * Get the command object itself.
+	 * @return
+	 */
+	public Command getCommand() {
+		return command;
+	}
+
+	/**
+	 * Get all string arguments.
+	 * @return
+	 */
+	public List<String> getArguments() {
+		return arguments;
+	}
+	
 }

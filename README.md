@@ -4,6 +4,9 @@ A Discord bot built for community servers running Medius servers such as [Clank]
 
 Written for the [Ratchet & Clank Online Discord Community](https://discord.gg/mUQzqGu).
 
+While you can use WebHooks to publish event data from a Medius stack to Discord,
+Medius Discord Bot allows users of a Discord server to send queries to the Medius
+stack directly in a standardized way.
 
 ## Features
 
@@ -13,6 +16,7 @@ Written for the [Ratchet & Clank Online Discord Community](https://discord.gg/mU
 - [ ] JQM Players.
 - [ ] JQM Games.
 - [ ] JQM Rank (leaderboards).
+- [ ] Caching.
 
 
 ## Configuration
@@ -25,7 +29,6 @@ Written for the [Ratchet & Clank Online Discord Community](https://discord.gg/mU
 | prefix    | string | Usually a character that this bot will listen to as a prefix for commands. This can be set to `null` to not listen to any prefix and instead listen to mentions only. |
 | operators | array  | An array of integer values that represent Discord User Id's who have full control of the bot.                                                                         |
 | servers   | array  | An array of Server Objects which have information regarding each Medius Server and component.                                                                         |
-|           |        |                                                                                                                                                                       |
 
 **Server Objects:**
 | Name        | Type    | Description                                                     |
@@ -62,18 +65,22 @@ While all required parameters are defined with **<angle brackets>**.
 - `kick <server name> <player>` - Kick a player from the server.
 
 
+## Building/Compiling
+
+To build the project simply use `./build.sh` and to run the project use `./launch.sh`.
+
+
 ## JSON Query Messages Protocol
 
 The communication protocol between the Medius Lobby Server component and the bot use JSON query messages.
 All response messages may include an optional `additional_message` field of type `string` which is appended to the chat message.
 
 
-#### Broadcast
+### Broadcast
 
 Show a list of players and basic player information.
 
-**Request:**
-
+###### Request
 ```json
 {
 	"query": "broadcast",
@@ -81,8 +88,7 @@ Show a list of players and basic player information.
 }
 ```
 
-**Response:**
-
+###### Response
 ```json
 {
 	"success": true
@@ -90,19 +96,18 @@ Show a list of players and basic player information.
 ```
 
 
-#### Players
+### Players
 
 Show a list of players and basic player information.
 
-**Request:**
-
+###### Request
 ```json
 {
 	"query": "players"
 }
 ```
 
-**Response:**
+###### Response
 
 - `total` is the total numbers of users registered.
 
@@ -129,19 +134,18 @@ Show a list of players and basic player information.
 }
 ```
 
-#### Games
+### Games
 
 Show a list of active games staged or in-progress.
 
-**Request:**
-
+###### Request
 ```json
 {
 	"query": "games"
 }
 ```
 
-**Response:**
+###### Response
 
 - `extra_info` is an object that takes Key-Value pair string values for additional game information, this allows this bot to be used for other Medius titles as well.
 

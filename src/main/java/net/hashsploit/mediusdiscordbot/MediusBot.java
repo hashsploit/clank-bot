@@ -72,6 +72,20 @@ public class MediusBot {
 	}
 
 	/**
+	 * Check if a Discord Client Id is an operator.
+	 * @param discordId
+	 * @return
+	 */
+	public boolean isOperator(long discordId) {
+		for (long id : config.getOperators()) {
+			if (id == discordId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Gracefully shutdown the bot.
 	 */
 	public void shutdown() {
