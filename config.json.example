@@ -14,6 +14,7 @@
 			"port": 10093,
 			"token": "super secret token",
 			"color": 8912896
-		},
-	]
+		}
+	],
+	"faq_words": ["server", "servers", "ready", "when"]
 }

@@ -18,6 +18,7 @@ public class MediusBotConfig {
 	private String token;
 	private String prefix;
 	private HashSet<Long> operators;
+	private HashSet<String> faqWords;
 	private HashSet<MediusJQMServer> servers;
 	
 	public MediusBotConfig(JSONObject json) {
@@ -35,7 +36,16 @@ public class MediusBotConfig {
 			final long id = Long.parseLong(jsonOperatorIterator.next().toString());
 			operators.add(id);
 		}
-		
+
+		// Load faqWords
+		this.faqWords = new HashSet<String>();
+		final JSONArray jsonFaqWordsArray = json.getJSONArray("faq_words");
+		final Iterator<Object> jsonFaqWordsIterator = jsonFaqWordsArray.iterator();
+		while (jsonFaqWordsIterator.hasNext()) {
+			final String faqWord = jsonFaqWordsIterator.next().toString();
+			faqWords.add(faqWord);
+		}
+
 		// Load Server
 		this.servers = new HashSet<MediusJQMServer>();
 		final JSONArray jsonServerArray = json.getJSONArray("servers");
@@ -95,6 +105,10 @@ public class MediusBotConfig {
 	public void setOperators(HashSet<Long> operators) {
 		this.operators = operators;
 	}
+
+	public HashSet<String> getFaqWords(){ return this.faqWords; }
+
+	public void setFaqWords(HashSet<String> faqWords) { this.faqWords = faqWords; }
 
 	public HashSet<MediusJQMServer> getServers() {
 		return servers;

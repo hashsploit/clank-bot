@@ -14,13 +14,14 @@ public class CommandEvent {
 	private final User issuer;
 	private final MessageChannel channel;
 	private final Command command;
-	private final List<String> arguments;
+
+	private final ArrayList<String> arguments;
 	
 	public CommandEvent(final User issuer, final MessageChannel channel, final Command command, final List<String> arguments) {
 		this.issuer = issuer;
 		this.channel = channel;
 		this.command = command;
-		this.arguments = new ArrayList<String>();
+		this.arguments = new ArrayList<>(arguments);
 	}
 
 	public void reply(String message) {
@@ -30,15 +31,21 @@ public class CommandEvent {
 	public void reply(MessageEmbed embed) {
 		this.channel.sendMessage(embed).complete();
 	}
-	
+
+	public void replyDM(String message) {
+		issuer.openPrivateChannel().queue(channel -> channel.sendMessage(message).queue());
+	}
+
+	public void replyDM(MessageEmbed embed) {
+		issuer.openPrivateChannel().queue(channel -> channel.sendMessage(embed).queue());
+	}
+
 	/**
 	 * Send a JSON Query Message  
 	 * @param server
 	 * @param payload
 	 */
 	public JSONObject sendJSONQueryMessage(String server, JSONObject payload) {
-		
-		
 		return null;
 	}
 
