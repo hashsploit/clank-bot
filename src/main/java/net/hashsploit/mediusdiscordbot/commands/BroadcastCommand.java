@@ -5,8 +5,8 @@ import net.hashsploit.mediusdiscordbot.CommandEvent;
 
 public class BroadcastCommand extends Command {
 
-	private static final String COMMAND = "broadcast";
-	private static final String DESCRIPTION = "Broadcast a message to all users on a specific server.";
+	public static final String COMMAND = "broadcast";
+	public static final String DESCRIPTION = "Broadcast a message to all users on a specific server.";
 	
 	public BroadcastCommand() {
 		super(COMMAND, DESCRIPTION, true);

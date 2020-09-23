@@ -5,8 +5,8 @@ import net.hashsploit.mediusdiscordbot.CommandEvent;
 
 public class ClearCommand extends Command {
 
-	private static final String COMMAND = "shutdown";
-	private static final String DESCRIPTION = "Shutdown the Bot";
+	public static final String COMMAND = "shutdown";
+	public static final String DESCRIPTION = "Shutdown the Bot";
 	
 	private boolean isWorking;
 	

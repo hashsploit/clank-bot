@@ -19,8 +19,8 @@ import net.hashsploit.mediusdiscordbot.MediusBot;
 
 public class HelpCommand extends Command {
 
-	private static final String COMMAND = "help";
-	private static final String DESCRIPTION = "Show a list of commands";
+	public static final String COMMAND = "help";
+	public static final String DESCRIPTION = "Show a list of commands";
 
 	public HelpCommand() {
 		super(COMMAND, DESCRIPTION, false);
@@ -30,20 +30,28 @@ public class HelpCommand extends Command {
 	public void onFire(CommandEvent event) {
 		
 		StringBuilder commands = new StringBuilder();
-		StringBuilder operatorCommands = new StringBuilder();
-
-		for (Command c : MediusBot.getInstance().getCommands()) {
-			if (c.isOperatorCommand() && MediusBot.getInstance().isOperator(event.getIssuer().getIdLong())) {
-				operatorCommands.append("");
-			} else {
-				commands.append("");
+		
+		
+		
+		
+		for (final Command c : MediusBot.getInstance().getCommands()) {
+			if (!c.isOperatorCommand()) {
+				commands.append("`" + c.getName() + "` - " + c.getDescription()).append('\n');
+			}
+		}
+		
+		if (MediusBot.getInstance().isOperator(event.getIssuer().getIdLong())) {
+			for (final Command c : MediusBot.getInstance().getCommands()) {
+				if (c.isOperatorCommand()) {
+					commands.append("`" + c.getName() + "`* - " + c.getDescription()).append('\n');
+				}
 			}
 		}
 		
 		
 		
-		
-		
+		// TODO: Make this fancy.
+		/*
 		String url = null;
 		String title = "Title";
 		String description = "Description";
@@ -72,6 +80,10 @@ public class HelpCommand extends Command {
 		MessageEmbed embed = new MessageEmbed(url, title, description, type, timestamp, color, thumbnail, siteProvider, author, videoInfo, footer, image, fields);
 
 		event.reply(embed);
+		*/
+		
+		event.reply(commands.toString());
+		
 	}
 
 }

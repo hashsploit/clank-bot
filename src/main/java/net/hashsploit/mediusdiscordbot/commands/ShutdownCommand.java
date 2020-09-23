@@ -6,8 +6,8 @@ import net.hashsploit.mediusdiscordbot.MediusBot;
 
 public class ShutdownCommand extends Command {
 
-	private static final String COMMAND = "shutdown";
-	private static final String DESCRIPTION = "Shutdown the Bot";
+	public static final String COMMAND = "shutdown";
+	public static final String DESCRIPTION = "Shutdown the Bot";
 	
 	public ShutdownCommand() {
 		super(COMMAND, DESCRIPTION, true);
