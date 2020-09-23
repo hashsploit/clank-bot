@@ -1,6 +1,5 @@
 package net.hashsploit.mediusdiscordbot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -14,38 +13,54 @@ public class CommandEvent {
 	private final User issuer;
 	private final MessageChannel channel;
 	private final Command command;
-
-	private final ArrayList<String> arguments;
+	private final List<String> arguments;
 	
 	public CommandEvent(final User issuer, final MessageChannel channel, final Command command, final List<String> arguments) {
 		this.issuer = issuer;
 		this.channel = channel;
 		this.command = command;
-		this.arguments = new ArrayList<>(arguments);
+		this.arguments = arguments;
 	}
 
+	/**
+	 * Send a reply to the same channel as the issuer.
+	 * @param message
+	 */
 	public void reply(String message) {
 		this.channel.sendMessage(message).complete();
 	}
 	
+	/**
+	 * Send a fancy reply to the same channel as the issuer.
+	 * @param embed
+	 */
 	public void reply(MessageEmbed embed) {
 		this.channel.sendMessage(embed).complete();
 	}
 
+	/**
+	 * Send a reply to the issuer via their Direct Messages.
+	 * @param embed
+	 */
 	public void replyDM(String message) {
 		issuer.openPrivateChannel().queue(channel -> channel.sendMessage(message).queue());
 	}
 
+	/**
+	 * Send a fancy reply to the issuer via their Direct Messages.
+	 * @param embed
+	 */
 	public void replyDM(MessageEmbed embed) {
 		issuer.openPrivateChannel().queue(channel -> channel.sendMessage(embed).queue());
 	}
 
 	/**
-	 * Send a JSON Query Message  
+	 * Send a JSON Query Message.
 	 * @param server
 	 * @param payload
 	 */
 	public JSONObject sendJSONQueryMessage(String server, JSONObject payload) {
+		// FIXME: missing
 		return null;
 	}
 

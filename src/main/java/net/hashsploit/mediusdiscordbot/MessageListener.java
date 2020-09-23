@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.hashsploit.mediusdiscordbot.commands.StatusCommand;
 
 public class MessageListener extends ListenerAdapter {
 
@@ -53,11 +54,11 @@ public class MessageListener extends ListenerAdapter {
 		}
 
 		// Parse remaining messages and search for server status related inquiries
-		if (!isFromPM && !isBotMessage && !isMention && !usesPrefix){
+		if (!isFromPM && !isBotMessage && !isMention && !usesPrefix) {
 			HashSet<String> messageWords = new HashSet<String>(Arrays.asList(event.getMessage().getContentRaw().split(" ")));
 
 			if (!Collections.disjoint(messageWords, MediusBot.getInstance().getConfig().getFaqWords())) {
-				final String command = "serverStatus";
+				final String command = StatusCommand.COMMAND;
 				final String[] args = new String[]{"parsed"};
 
 				handleCommand(event, command, args);

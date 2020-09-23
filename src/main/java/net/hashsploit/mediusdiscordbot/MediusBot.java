@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.hashsploit.mediusdiscordbot.commands.ClearCommand;
 import net.hashsploit.mediusdiscordbot.commands.HelpCommand;
 import net.hashsploit.mediusdiscordbot.commands.ShutdownCommand;
-import net.hashsploit.mediusdiscordbot.commands.ServerStatusCommand;
+import net.hashsploit.mediusdiscordbot.commands.StatusCommand;
 
 public class MediusBot {
 
@@ -52,7 +52,7 @@ public class MediusBot {
 		commands.add(new HelpCommand());
 		commands.add(new ShutdownCommand());
 		commands.add(new ClearCommand());
-		commands.add(new ServerStatusCommand());
+		commands.add(new StatusCommand());
 		
 		// Initialize JDA
 		try {
