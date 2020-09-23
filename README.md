@@ -30,6 +30,7 @@ stack directly in a standardized way.
 | operators | array  | An array of integer values that represent Discord User Id's who have full control of the bot.                                                                         |
 | servers   | array  | An array of Server Objects which have information regarding each Medius Server and component.                                                                         |
 
+
 **Server Objects:**
 | Name        | Type    | Description                                                     |
 |-------------|---------|-----------------------------------------------------------------|
@@ -51,7 +52,7 @@ While all required parameters are defined with **<angle brackets>**.
 #### Common user commands:
 - `help [command]` - Show all commands, or show information about a specific command. Example: `!help players`.
 - `servers` - Show a list of available Medius servers. Example: `!servers`.
-- `status <server name>` - Show server status. Example: `!status dl`.
+- `status [server name]` - Show server status. Example: `!status` or `!status dl`.
 - `players <server name>` - Show all currently connected players on `server`. Example: `!players dl`.
 - `games <server name>` - Show all game statuses. Example: `!games dl`.
 - `rank <server name> [player]` - Show the current command issuer's username/nick's rank. If the username is not found or the issuer name is not a valid player in game the optional **[player]** parameter should be used. Example: `!rank dl Reconker`.

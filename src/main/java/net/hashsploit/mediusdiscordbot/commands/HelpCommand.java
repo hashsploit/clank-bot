@@ -1,18 +1,5 @@
 package net.hashsploit.mediusdiscordbot.commands;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.dv8tion.jda.api.entities.EmbedType;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.MessageEmbed.AuthorInfo;
-import net.dv8tion.jda.api.entities.MessageEmbed.Field;
-import net.dv8tion.jda.api.entities.MessageEmbed.Footer;
-import net.dv8tion.jda.api.entities.MessageEmbed.ImageInfo;
-import net.dv8tion.jda.api.entities.MessageEmbed.Provider;
-import net.dv8tion.jda.api.entities.MessageEmbed.Thumbnail;
-import net.dv8tion.jda.api.entities.MessageEmbed.VideoInfo;
 import net.hashsploit.mediusdiscordbot.Command;
 import net.hashsploit.mediusdiscordbot.CommandEvent;
 import net.hashsploit.mediusdiscordbot.MediusBot;
@@ -31,9 +18,6 @@ public class HelpCommand extends Command {
 		
 		StringBuilder commands = new StringBuilder();
 		
-		
-		
-		
 		for (final Command c : MediusBot.getInstance().getCommands()) {
 			if (!c.isOperatorCommand()) {
 				commands.append("`" + c.getName() + "` - " + c.getDescription()).append('\n');
@@ -47,8 +31,6 @@ public class HelpCommand extends Command {
 				}
 			}
 		}
-		
-		
 		
 		// TODO: Make this fancy.
 		/*

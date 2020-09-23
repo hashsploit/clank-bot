@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 public class CommandEvent {
 
@@ -51,7 +52,12 @@ public class CommandEvent {
 	 * @param embed
 	 */
 	public void replyDM(MessageEmbed embed) {
-		issuer.openPrivateChannel().queue(channel -> channel.sendMessage(embed).queue());
+		// FIXME: Some users with DM's disabled throws this exception. Find a better way to handle.
+		try {
+			issuer.openPrivateChannel().queue(channel -> channel.sendMessage(embed).queue());
+		} catch (ErrorResponseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

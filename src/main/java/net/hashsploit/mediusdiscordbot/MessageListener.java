@@ -59,7 +59,9 @@ public class MessageListener extends ListenerAdapter {
 
 			if (!Collections.disjoint(messageWords, MediusBot.getInstance().getConfig().getFaqWords())) {
 				final String command = StatusCommand.COMMAND;
-				final String[] args = new String[]{"parsed"};
+				final String[] args = new String[]{
+					"parsed"
+				};
 
 				handleCommand(event, command, args);
 			}

@@ -26,12 +26,12 @@ public class StatusCommand extends Command {
 		eb.addField("DL Online Status", "In closed-beta right now and restricted to users with the #dl-beta-testing role only. Managed by @Dnawrkshp#8266 .", true);
 		eb.addField("UYA Online Status", "In development and managed by @hashsploit#0001 .", true);
 
-		if (args.get(0).equals("parsed")) {
-			event.replyDM(eb.build());
-		} else {
-			event.reply(eb.build());
+		if (args.size() > 0) {
+			if (args.get(0).equals("parsed")) {
+				event.replyDM(eb.build());
+			} else {
+				event.reply(eb.build());
+			}
 		}
-
 	}
-
 }

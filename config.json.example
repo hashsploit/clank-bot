@@ -16,5 +16,10 @@
 			"color": 8912896
 		}
 	],
-	"faq_words": ["server", "servers", "ready", "when"]
+	"faq_words": [
+		"server",
+		"servers",
+		"ready",
+		"when"
+	]
 }
