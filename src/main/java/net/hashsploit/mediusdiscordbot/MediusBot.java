@@ -16,12 +16,13 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.hashsploit.mediusdiscordbot.commands.ClearCommand;
 import net.hashsploit.mediusdiscordbot.commands.HelpCommand;
 import net.hashsploit.mediusdiscordbot.commands.ShutdownCommand;
+import net.hashsploit.mediusdiscordbot.commands.StatusCommand;
 
 public class MediusBot {
 
 	private static final Logger logger = LoggerFactory.getLogger(MediusBot.class);
 	public static final String NAME = "Medius Discord Bot";
-	public static final String VERSION = "0.1.1";
+	public static final String VERSION = "0.1.2";
 	private static MediusBot bot;
 	
 	public MediusBotConfig config;
@@ -51,6 +52,7 @@ public class MediusBot {
 		commands.add(new HelpCommand());
 		commands.add(new ShutdownCommand());
 		commands.add(new ClearCommand());
+		commands.add(new StatusCommand());
 		
 		// Initialize JDA
 		try {
@@ -69,6 +71,20 @@ public class MediusBot {
 		}
 	}
 
+	/**
+	 * Check if a Discord Client Id is an operator.
+	 * @param discordId
+	 * @return
+	 */
+	public boolean isOperator(long discordId) {
+		for (long id : config.getOperators()) {
+			if (id == discordId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Gracefully shutdown the bot.
 	 */
