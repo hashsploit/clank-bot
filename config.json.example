@@ -6,6 +6,7 @@
 		000000000000000000,
 		123456789012345678
 	],
+	"default_color": 13158600,
 	"servers": [
 		{
 			"name": "dl",
@@ -14,6 +15,14 @@
 			"port": 10093,
 			"token": "super secret token",
 			"color": 8912896
+		},
+		{
+			"name": "uya",
+			"description": "Up Your Arsenal",
+			"address": "127.0.0.1",
+			"port": 10093,
+			"token": "super secret token",
+			"color": 16755200
 		}
 	],
 	"faq_words": [

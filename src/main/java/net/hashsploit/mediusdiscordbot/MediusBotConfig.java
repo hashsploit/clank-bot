@@ -1,6 +1,7 @@
 package net.hashsploit.mediusdiscordbot;
 
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.json.JSONArray;
@@ -18,8 +19,9 @@ public class MediusBotConfig {
 	private String token;
 	private String prefix;
 	private HashSet<Long> operators;
+	private int defaultColor;
+	private HashMap<String, MediusJQMServer> servers;
 	private HashSet<String> faqWords;
-	private HashSet<MediusJQMServer> servers;
 	
 	public MediusBotConfig(JSONObject json) {
 		this.json = json;
@@ -27,7 +29,8 @@ public class MediusBotConfig {
 		this.logLevel = Level.valueOf(json.getString("log_level"));
 		this.token = json.getString("token");
 		this.prefix = json.getString("prefix");
-		
+		this.defaultColor = json.getInt("default_color");
+
 		// Load operators
 		this.operators = new HashSet<Long>();
 		final JSONArray jsonOperatorArray = json.getJSONArray("operators");
@@ -47,7 +50,7 @@ public class MediusBotConfig {
 		}
 
 		// Load Server
-		this.servers = new HashSet<MediusJQMServer>();
+		this.servers = new HashMap<String, MediusJQMServer>();
 		final JSONArray jsonServerArray = json.getJSONArray("servers");
 		final Iterator<Object> jsonServerIterator = jsonServerArray.iterator();
 		while (jsonServerIterator.hasNext()) {
@@ -60,7 +63,7 @@ public class MediusBotConfig {
 			final int color = jsonServer.getInt("color");
 			
 			final MediusJQMServer server = new MediusJQMServer(name, description, address, port, token, color);
-			servers.add(server);
+			servers.put(name, server);
 		}
 		
 		logger.info("Configuration loaded.");
@@ -98,6 +101,14 @@ public class MediusBotConfig {
 		this.prefix = prefix;
 	}
 
+	public int getDefaultColor(){
+		return defaultColor;
+	}
+
+	public int setDefaultColor(){
+		return defaultColor;
+	}
+
 	public HashSet<Long> getOperators() {
 		return operators;
 	}
@@ -110,11 +121,11 @@ public class MediusBotConfig {
 
 	public void setFaqWords(HashSet<String> faqWords) { this.faqWords = faqWords; }
 
-	public HashSet<MediusJQMServer> getServers() {
+	public HashMap<String, MediusJQMServer> getServers() {
 		return servers;
 	}
 
-	public void setServers(HashSet<MediusJQMServer> servers) {
+	public void setServers(HashMap<String, MediusJQMServer> servers) {
 		this.servers = servers;
 	}
 	

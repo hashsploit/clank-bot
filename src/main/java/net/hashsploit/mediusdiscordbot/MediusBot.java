@@ -23,6 +23,7 @@ public class MediusBot {
 	private static final Logger logger = LoggerFactory.getLogger(MediusBot.class);
 	public static final String NAME = "Medius Discord Bot";
 	public static final String VERSION = "0.1.2";
+	public static final String ICON = "https://upload.wikimedia.org/wikipedia/en/2/22/All_4_One_-_Clank.png";
 	private static MediusBot bot;
 	
 	public MediusBotConfig config;
