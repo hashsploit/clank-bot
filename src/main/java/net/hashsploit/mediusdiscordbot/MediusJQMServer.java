@@ -94,5 +94,4 @@ public class MediusJQMServer {
 	public int getColor() {
 		return color;
 	}
-	
 }

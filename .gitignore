@@ -7,3 +7,4 @@ config.json
 .classpath
 *.swp
 *.tmp
+run
