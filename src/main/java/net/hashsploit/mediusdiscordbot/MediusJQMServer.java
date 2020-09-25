@@ -1,5 +1,7 @@
 package net.hashsploit.mediusdiscordbot;
 
+import java.util.HashMap;
+
 public class MediusJQMServer {
 	
 	private final String name;
@@ -8,17 +10,21 @@ public class MediusJQMServer {
 	private final int port;
 	private final String token;
 	private final int color;
+	private String staticStatus;
+	private final HashMap<String,String> commandIcons;
 	
 	private int cachedTotalPlayers;
 	private int cachedOnlinePlayers;
 	
-	public MediusJQMServer(final String name, final String description, final String address, final int port, final String token, final int color) {
+	public MediusJQMServer(final String name, final String description, final String address, final int port, final String token, final int color, final String staticStatus ,final HashMap<String, String> commandIcons) {
 		this.name = name;
 		this.description = description;
 		this.address = address;
 		this.port = port;
 		this.token = token;
 		this.color = color;
+		this.staticStatus = staticStatus;
+		this.commandIcons = commandIcons;
 	}
 
 	/**
@@ -93,5 +99,19 @@ public class MediusJQMServer {
 	 */
 	public int getColor() {
 		return color;
+	}
+
+	/**
+	 * Get the Medius JQM static status message.
+	 */
+	public String getStaticStatus(){
+		return staticStatus;
+	}
+	
+	/**
+	 * Get the Medius JQM server command icons.
+	 */
+	public HashMap<String, String> getCommandIcons(){
+		return commandIcons;
 	}
 }

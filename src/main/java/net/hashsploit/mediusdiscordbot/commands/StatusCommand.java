@@ -19,42 +19,41 @@ public class StatusCommand extends Command {
 		super(COMMAND, DESCRIPTION, false);
 	}
 
+	private String getStatus(MediusJQMServer server){
+		if (server.getStaticStatus() != null){
+			return server.getStaticStatus();
+		}
+
+		return "Server pinging under development!";
+	}
+	
 	@Override
 	public void onFire(CommandEvent event) {
 		EmbedBuilder embed = new EmbedBuilder();
 
 		List<String> args = event.getArguments();	//expect server names
 		HashMap<String, MediusJQMServer> servers = MediusBot.getInstance().getConfig().getServers();
-		HashMap<String, String> serverStatus = new HashMap<String, String>();
-		HashMap<String, String> thumbnails = new HashMap<String, String>();
 
-		serverStatus.put("uya", "Currently in development.");
-		thumbnails.put("uya", "https://i.imgur.com/nc2eE2s.png");
-
-		serverStatus.put("dl", "Currently in beta phase.");
-		thumbnails.put("dl", "https://i.imgur.com/N0AhWfe.png");
-
-
-		String thumbnail = "https://i.imgur.com/Yo0Efh2.png";	//default
+		String thumbnail = MediusBot.getInstance().getConfig().getDefaultCommandIcons().get(COMMAND);
 		int color = MediusBot.getInstance().getConfig().getDefaultColor();
-		if (args.size() == 1 && serverStatus.containsKey(args.get(0)) && servers.containsKey(args.get(0))){
-			thumbnail = thumbnails.get(args.get(0));
-			color = servers.get(args.get(0)).getColor();
-			embed.addField('`' + args.get(0) + '`', serverStatus.get(args.get(0)), false);
+		if (args.size() == 1 && servers.containsKey(args.get(0))){
+			final MediusJQMServer server = servers.get(args.get(0));
+			if (server.getCommandIcons().containsKey(COMMAND)){
+				thumbnail = server.getCommandIcons().get(COMMAND);
+			}
+			color = server.getColor();
+			embed.addField('`' + server.getName() + '`', getStatus(server), false);
 		} else {
-			for (Map.Entry<String, String> entry : serverStatus.entrySet()){
-				embed.addField('`' + entry.getKey() + '`', serverStatus.get(entry.getKey()), false);
+			embed.setDescription(DESCRIPTION);
+			for (MediusJQMServer server : servers.values()){
+				embed.addField('`' + server.getName() + '`', getStatus(server), false);
 			}
 		}
 		embed.setTitle("Servers Status", "https://status.uyaonline.com/");
-		embed.setDescription(DESCRIPTION);
+		embed.setThumbnail(thumbnail);
 		embed.setColor(color);
 		embed.setAuthor​(MediusBot.NAME, null, MediusBot.ICON);
-		embed.setThumbnail(thumbnail);
-		embed.setFooter​(MediusBot.NAME);
 
-		embed.addField("", "[UYAOnline](https://uyaonline.com/)", true);
-		
 		event.reply(embed.build());
 	}
 }

@@ -21,6 +21,7 @@ public class MediusBotConfig {
 	private HashSet<Long> operators;
 	private int defaultColor;
 	private HashMap<String, MediusJQMServer> servers;
+	private HashMap<String, String> defaultCommandIcons;
 	private HashSet<String> faqWords;
 	
 	public MediusBotConfig(JSONObject json) {
@@ -49,6 +50,14 @@ public class MediusBotConfig {
 			faqWords.add(faqWord);
 		}
 
+		//Load default command icons
+		this.defaultCommandIcons = new HashMap<String, String>();
+		final JSONObject jsonDefaultCommandIcons = json.getJSONObject("default_command_icons");
+		final Iterator<String> jsonDefaultCommandIconsNameIter = jsonDefaultCommandIcons.keys();
+			while (jsonDefaultCommandIconsNameIter.hasNext()){
+				final String commandName = jsonDefaultCommandIconsNameIter.next();
+				this.defaultCommandIcons.put(commandName, jsonDefaultCommandIcons.getString(commandName));
+			}
 		// Load Server
 		this.servers = new HashMap<String, MediusJQMServer>();
 		final JSONArray jsonServerArray = json.getJSONArray("servers");
@@ -61,8 +70,18 @@ public class MediusBotConfig {
 			final int port = jsonServer.getInt("port");
 			final String token = jsonServer.getString("token");
 			final int color = jsonServer.getInt("color");
-			
-			final MediusJQMServer server = new MediusJQMServer(name, description, address, port, token, color);
+			final String staticStatus = jsonServer.has("static_status") ? jsonServer.getString("static_status") : null;
+
+			//Load specified command icons for server
+			final HashMap<String, String> commandIcons = new HashMap<String,String>();
+			final JSONObject jsonCmdIcons = jsonServer.getJSONObject("command_icons");
+			final Iterator<String> jsonCmdIconsNamesIter = jsonCmdIcons.keys();
+			while (jsonCmdIconsNamesIter.hasNext()){
+				final String commandName = jsonCmdIconsNamesIter.next();
+				commandIcons.put(commandName, jsonCmdIcons.getString(commandName));
+			}
+
+			final MediusJQMServer server = new MediusJQMServer(name, description, address, port, token, color, staticStatus, commandIcons);
 			servers.put(name, server);
 		}
 		
@@ -105,8 +124,8 @@ public class MediusBotConfig {
 		return defaultColor;
 	}
 
-	public int setDefaultColor(){
-		return defaultColor;
+	public void setDefaultColor(int defaultColor){
+		this.defaultColor = defaultColor;
 	}
 
 	public HashSet<Long> getOperators() {
@@ -117,7 +136,17 @@ public class MediusBotConfig {
 		this.operators = operators;
 	}
 
-	public HashSet<String> getFaqWords(){ return this.faqWords; }
+	public HashMap<String,String> getDefaultCommandIcons(){
+		return defaultCommandIcons;
+	}
+	
+	public void setDefaultCommandIcons(HashMap<String, String> defaultCommandIcons){
+		this.defaultCommandIcons = defaultCommandIcons;
+	}
+
+	public HashSet<String> getFaqWords(){ 
+		return this.faqWords; 
+	}
 
 	public void setFaqWords(HashSet<String> faqWords) { this.faqWords = faqWords; }
 

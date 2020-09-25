@@ -18,28 +18,27 @@ public class HelpCommand extends Command {
 	@Override
 	public void onFire(CommandEvent event) {		
 		EmbedBuilder embed = new EmbedBuilder();
-		final String thumbnail = "https://i.imgur.com/uLdPtjc.png";
 
 		// can be used for showing last cache value
 		// OffsetDateTime timestamp = OffsetDateTime.now();
 
-		embed.addBlankField(false);//line break after top meta info
-
-		boolean issuerIsOperator = MediusBot.getInstance().isOperator(event.getIssuer().getIdLong());
 		for (final Command c : MediusBot.getInstance().getCommands()) {
-			if (!c.isOperatorCommand() || issuerIsOperator) {
+			if (!c.isOperatorCommand()) {
 				embed.addField('`' + c.getName() + '`', c.getDescription(), false);
+			}
+		}
+		if (MediusBot.getInstance().isOperator(event.getIssuer().getIdLong())){
+			for (final Command c : MediusBot.getInstance().getCommands()) {
+				if (c.isOperatorCommand()) {
+					embed.addField('`' + c.getName() + '`', c.getDescription(), false);
+				}
 			}
 		}
 		embed.setTitle(COMMAND);
 		embed.setDescription(DESCRIPTION );
+		embed.setThumbnail(MediusBot.getInstance().getConfig().getDefaultCommandIcons().get(COMMAND));
 		embed.setColor(MediusBot.getInstance().getConfig().getDefaultColor());
 		embed.setAuthor​(MediusBot.NAME, null, MediusBot.ICON);
-		embed.setThumbnail(thumbnail);
-		embed.setFooter​(MediusBot.NAME);
-
-		embed.addBlankField(false);//line break before footer section
-		embed.addField("", "[UYAOnline](https://uyaonline.com/)", true);
 		
 		event.reply(embed.build());
 	}
