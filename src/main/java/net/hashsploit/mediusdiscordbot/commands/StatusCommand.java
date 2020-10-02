@@ -26,6 +26,7 @@ public class StatusCommand extends Command {
 		super(COMMAND, DESCRIPTION, false, new TimedHashmap<String,String>());
 	}
 
+	//need to not make the url hardcoded! change in config!
 	private CompletableFuture<String> getStatus(){
 		CompletableFuture<String> res = new CompletableFuture<String>();
 		if (!this.getJQMServerCache().containsKey("status")){
