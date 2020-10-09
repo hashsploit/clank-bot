@@ -5,14 +5,14 @@ import net.hashsploit.mediusdiscordbot.CommandEvent;
 import net.hashsploit.mediusdiscordbot.MediusBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
-
+import net.hashsploit.mediusdiscordbot.util.TimedHashmap;
 public class HelpCommand extends Command {
 
 	public static final String COMMAND = "help";
 	public static final String DESCRIPTION = "Show a list of commands";
 
 	public HelpCommand() {
-		super(COMMAND, DESCRIPTION, false);
+		super(COMMAND, DESCRIPTION, false, new TimedHashmap<String,String>());
 	}
 
 	@Override

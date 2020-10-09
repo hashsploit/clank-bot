@@ -2,6 +2,7 @@ package net.hashsploit.mediusdiscordbot.commands;
 
 import net.hashsploit.mediusdiscordbot.Command;
 import net.hashsploit.mediusdiscordbot.CommandEvent;
+import net.hashsploit.mediusdiscordbot.util.TimedHashmap;
 
 public class ClearCommand extends Command {
 
@@ -11,7 +12,7 @@ public class ClearCommand extends Command {
 	private boolean isWorking;
 	
 	public ClearCommand() {
-		super(COMMAND, DESCRIPTION, true);
+		super(COMMAND, DESCRIPTION, true, new TimedHashmap<String,String>());
 		isWorking = false;
 	}
 

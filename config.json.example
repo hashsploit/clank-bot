@@ -18,8 +18,7 @@
             "color": 8912896,
             "command_icons": {
                 "status": "https://i.imgur.com/N0AhWfe.png"
-            },
-            "static_status": "Server is currently under beta testing, and will be public soon."
+            }
         },
         {
             "name": "uya",
