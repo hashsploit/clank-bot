@@ -17,6 +17,7 @@ import net.hashsploit.mediusdiscordbot.commands.ClearCommand;
 import net.hashsploit.mediusdiscordbot.commands.HelpCommand;
 import net.hashsploit.mediusdiscordbot.commands.ShutdownCommand;
 import net.hashsploit.mediusdiscordbot.commands.StatusCommand;
+import net.hashsploit.mediusdiscordbot.MediusInformationClient;
 
 public class MediusBot {
 
@@ -26,9 +27,10 @@ public class MediusBot {
 	public static final String ICON = "https://upload.wikimedia.org/wikipedia/en/2/22/All_4_One_-_Clank.png";
 	private static MediusBot bot;
 	
+	
 	public MediusBotConfig config;
 	public HashSet<Command> commands;
-	public JDA jda;
+	public JDA jda; 
 
 	public MediusBot(JSONObject json) {
 		
@@ -54,7 +56,7 @@ public class MediusBot {
 		commands.add(new ShutdownCommand());
 		commands.add(new ClearCommand());
 		commands.add(new StatusCommand());
-		
+
 		// Initialize JDA
 		try {
 			jda = JDABuilder.createLight(config.getToken())

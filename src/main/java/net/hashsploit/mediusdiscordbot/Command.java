@@ -7,13 +7,13 @@ public abstract class Command implements ICommand {
 	private final String name;
 	private final String description;
 	private final boolean operatorCmd;
-	private final TimedHashmap<String, String> JQMServerCache;
+	private final TimedHashmap<String, String> GRPCServerCache;
 	
-	public Command(final String name, final String description, final boolean operatorCmd, final TimedHashmap<String, String> JQMServerCache) {
+	public Command(final String name, final String description, final boolean operatorCmd, final TimedHashmap<String, String> GRPCServerCache) {
 		this.name = name;
 		this.description = description;
 		this.operatorCmd = operatorCmd;
-		this.JQMServerCache = JQMServerCache;
+		this.GRPCServerCache = GRPCServerCache;
 	}
 	
 	/**
@@ -36,8 +36,8 @@ public abstract class Command implements ICommand {
 	 * Get the command description.
 	 * @return
 	 */
-	public TimedHashmap<String, String> getJQMServerCache() {
-		return JQMServerCache;
+	public TimedHashmap<String, String> getGRPCServerCache() {
+		return GRPCServerCache;
 	}
 	
 	/**

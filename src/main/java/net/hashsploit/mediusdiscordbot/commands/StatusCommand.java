@@ -1,6 +1,5 @@
 package net.hashsploit.mediusdiscordbot.commands;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,45 +11,44 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.hashsploit.mediusdiscordbot.Command;
 import net.hashsploit.mediusdiscordbot.CommandEvent;
 import net.hashsploit.mediusdiscordbot.MediusBot;
+import net.hashsploit.mediusdiscordbot.MediusInformationClient;
 import net.hashsploit.mediusdiscordbot.MediusJQMServer;
 import net.hashsploit.mediusdiscordbot.util.TimedHashmap;
 import net.hashsploit.mediusdiscordbot.util.HTTPRequestor;
 import java.net.http.HttpResponse;
 
+import net.hashsploit.mediusdiscordbot.proto.MediusStructures.StatusListing;
+import net.hashsploit.mediusdiscordbot.proto.MediusStructures.StatusReq;
+import net.hashsploit.mediusdiscordbot.proto.MediusStructures.StatusRes;
+
 public class StatusCommand extends Command {
 
 	public static final String COMMAND = "status";
 	public static final String DESCRIPTION = "Gives users information about the current server status in either a pm if parsed or in channel if called with prefix.";
-
+	private final TimedHashmap<String, StatusRes> grpcResponseCache;
+	
 	public StatusCommand() {
 		super(COMMAND, DESCRIPTION, false, new TimedHashmap<String,String>());
+		this.grpcResponseCache = new TimedHashmap<String, StatusRes>();
 	}
 
-	//need to not make the url hardcoded! change in config!
-	private CompletableFuture<String> getStatus(){
-		CompletableFuture<String> res = new CompletableFuture<String>();
-		if (!this.getJQMServerCache().containsKey("status")){
-				final String body = new JSONObject().put("query", "status").toString();
-				HTTPRequestor client = new HTTPRequestor("http://localhost:3000", body, new ArrayList<String>(), 30);
-				client.makeRequest()
-				.thenApply( (String serverRes) -> {
-					this.getJQMServerCache().put("status", serverRes);
-					res.complete(serverRes);
-					return serverRes;
-				});
-		} else {
-			res.complete(this.getJQMServerCache().get("status"));
+	private StatusRes getServerStatus(MediusInformationClient client){
+		StatusRes serverStatus = this.grpcResponseCache.get(client.getName());
+
+		if (serverStatus == null){
+			StatusReq req = StatusReq.newBuilder().setServerName(client.getName()).build();
+			serverStatus = client.GetStatus(req);
+			this.grpcResponseCache.put(client.getName(), serverStatus);
 		}
-		return res;
+
+		return serverStatus;
 	}
-	
-	private HashMap<String, Boolean> parseServerStatuses(JSONObject jsonServer){
+
+	private HashMap<String, Boolean> parseServerStatuses(StatusRes serverStatuses){
 		HashMap<String, Boolean> statuses = new HashMap<String, Boolean>();
 
-		final Iterator<String> jsonRESTServerStatusesIter = jsonServer.keys();
-		while(jsonRESTServerStatusesIter.hasNext()){
-			final String MediusServerName = jsonRESTServerStatusesIter.next();
-			statuses.put(MediusServerName, new Boolean(jsonServer.getBoolean(MediusServerName)));
+		for(StatusListing status : serverStatuses.getServerStatusesList()){
+			statuses.put(status.getServerName(), new Boolean(status.getServerActive()));
 		}
 
 		return statuses;
@@ -58,70 +56,58 @@ public class StatusCommand extends Command {
 
 	@Override
 	public void onFire(CommandEvent event) {
-		EmbedBuilder embed = new EmbedBuilder();
-
 		final String checkEmoji = "✅";
 		final String xEmoji = "❌";
-		List<String> args = event.getArguments();	//expect server names
-		HashMap<String, MediusJQMServer> servers = MediusBot.getInstance().getConfig().getServers();
-		// embed.setDescription(DESCRIPTION);
-		getStatus()
-		.thenAccept((String statusRes) -> {
-			String thumbnail = MediusBot.getInstance().getConfig().getDefaultCommandIcons().get(COMMAND);
-			int color = MediusBot.getInstance().getConfig().getDefaultColor();
+		EmbedBuilder embed = new EmbedBuilder();
+		HashMap<String, MediusInformationClient> clients = MediusBot.getInstance().getConfig().getServers();
+		ArrayList<String> targetServers = new ArrayList<String>();
 
-			JSONObject jsonRESTServerStatusRes = new JSONObject(statusRes);
+		//parse args and figure out if server names are valid
+		for (String arg : event.getArguments()){
+			if (clients.containsKey(arg))	targetServers.add(arg);
+		}
 
-			// client queries for one particular server
-			if (args.size() == 1 && servers.containsKey(args.get(0))){
-				final MediusJQMServer server = servers.get(args.get(0));
+		int n = targetServers.size();
+		
+		// no server to find, try to help user
+		if (n == 0){
+			//shoot help status commanmd
+			return;
+		}
 
-				if (server.getCommandIcons().containsKey(COMMAND)){
-					thumbnail = server.getCommandIcons().get(COMMAND);
-				}
+		// define thumbnail and colors
+		int color = MediusBot.getInstance().getConfig().getDefaultColor();
+		String thumbnail = MediusBot.getInstance().getConfig().getDefaultCommandIcons().get(COMMAND);
+		if (n == 1){
+			MediusInformationClient client = clients.get(targetServers.get(0));
+			color = client.getColor();
+			thumbnail = client.getCommandIcons().get(COMMAND);
+		} 
+		
+		// populate embed with component statuses
+		for (String targetServerName : targetServers){
+			MediusInformationClient client = clients.get(targetServerName);
 
-				color = server.getColor();
-
-				//check first if we have a static status instead of a web res
-				if (server.getStaticStatus() != null){
-					embed.addField("**" + server.getName() + "**", server.getStaticStatus(), false);
-				} else {
-					HashMap<String, Boolean> statuses = parseServerStatuses(jsonRESTServerStatusRes.getJSONObject(server.getName()));
-
-					for (String mediusServer : statuses.keySet()){
-						embed.addField( (statuses.get(mediusServer).booleanValue() ? checkEmoji : xEmoji) + " **" + mediusServer + "**", "", false);
-					}
-				}
-			} else {
-				//client does an incorrect/ general query
-				for (MediusJQMServer server : servers.values()){ 
-					//check first if we have a static status instead of a web res
-					if (server.getStaticStatus() != null){
-						embed.addField("**" + server.getName() + "**", server.getStaticStatus(), false);
-						continue;
-					}
-
-					HashMap<String, Boolean> statuses = parseServerStatuses(jsonRESTServerStatusRes.getJSONObject(server.getName()));
-					boolean allHealthy = true;
-
-					for (String mediusServer : statuses.keySet()){
-						if (statuses.get(mediusServer).booleanValue() == false){
-							allHealthy = false;
-							break;
-						}
-					}
-
-					embed.addField((allHealthy ? checkEmoji : xEmoji) + " **" + server.getName() + "**", "" , false);
-				}
-
-				embed.setDescription(DESCRIPTION);
-				embed.addField("For detailed information, enter a specific server name.", "", false);
+			if (client.getStaticStatus() != null){
+				embed.addField(String.format("**%s**", client.getName()), client.getStaticStatus(), false);
+				continue;
 			}
 
-			embed.setTitle("Servers Status", "https://status.uyaonline.com/");
-			embed.setThumbnail(thumbnail);
-			embed.setColor(color);
-			event.reply(embed.build());
-		});
+			HashMap<String, Boolean> statuses = parseServerStatuses(getServerStatus(client));
+			boolean allHealthy = true;
+			for (String mediusComponent : statuses.keySet()){
+				if (statuses.get(mediusComponent).booleanValue() == false){
+					allHealthy = false;
+					if (n == 1)	embed.addField( (statuses.get(mediusComponent).booleanValue() ? checkEmoji : xEmoji) + " **" + mediusComponent + "**", "", false);
+				}
+			}
+
+			embed.addField(String.format("%s ** %s **", allHealthy ? checkEmoji : xEmoji, client.getName()), "", false);
+		}
+
+		embed.setTitle("Servers Status", "https://status.uyaonline.com/");
+		embed.setThumbnail(thumbnail);
+		embed.setColor(color);
+		event.reply(embed.build());
 	}
 }

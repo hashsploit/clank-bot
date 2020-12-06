@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "net.hashsploit.mediusdiscordbot.proto";
+
+service MediusInformation{
+    rpc GetStatus(StatusReq) returns (StatusRes) {}
+}
+
+
+message StatusListing{
+    string serverName = 1;
+    bool serverActive = 2;
+}
+
+message StatusReq{
+    string serverName = 1;
+}
+
+message StatusRes{
+    repeated StatusListing serverStatuses = 1;
+}

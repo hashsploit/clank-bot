@@ -20,9 +20,9 @@ public class MediusBotConfig {
 	private String prefix;
 	private HashSet<Long> operators;
 	private int defaultColor;
-	private HashMap<String, MediusJQMServer> servers;
+	private HashMap<String, MediusInformationClient> servers;
 	private HashMap<String, String> defaultCommandIcons;
-	private HashSet<String> faqWords;
+	private HashSet<String> faqWords; 
 	
 	public MediusBotConfig(JSONObject json) {
 		this.json = json;
@@ -59,7 +59,7 @@ public class MediusBotConfig {
 				this.defaultCommandIcons.put(commandName, jsonDefaultCommandIcons.getString(commandName));
 			}
 		// Load Server
-		this.servers = new HashMap<String, MediusJQMServer>();
+		this.servers = new HashMap<String, MediusInformationClient>();
 		final JSONArray jsonServerArray = json.getJSONArray("servers");
 		final Iterator<Object> jsonServerIterator = jsonServerArray.iterator();
 		while (jsonServerIterator.hasNext()) {
@@ -81,7 +81,7 @@ public class MediusBotConfig {
 				commandIcons.put(commandName, jsonCmdIcons.getString(commandName));
 			}
 
-			final MediusJQMServer server = new MediusJQMServer(name, description, address, port, token, color, staticStatus, commandIcons);
+			final MediusInformationClient server = new MediusInformationClient(name, description, address, port, token, color, staticStatus, commandIcons);
 			servers.put(name, server);
 		}
 		
@@ -150,11 +150,11 @@ public class MediusBotConfig {
 
 	public void setFaqWords(HashSet<String> faqWords) { this.faqWords = faqWords; }
 
-	public HashMap<String, MediusJQMServer> getServers() {
+	public HashMap<String, MediusInformationClient> getServers() {
 		return servers;
 	}
 
-	public void setServers(HashMap<String, MediusJQMServer> servers) {
+	public void setServers(HashMap<String, MediusInformationClient> servers) {
 		this.servers = servers;
 	}
 	
