@@ -25,7 +25,7 @@ public class TimedHashmap <K,V> {
 
     public V get(K key) throws NullPointerException{
         if (!containsKey(key)){
-            throw new NullPointerException();
+            return null;
         }
         return hashmap.get(key).getSecond();
     }

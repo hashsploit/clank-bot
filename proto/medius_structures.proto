@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+service MediusInformationServer{
+    rpc GetStatus(StatusReq) returns (StatusRes) {}
+}
+
+message StatusReq{
+    optional repeated string serverNames = 1;
+}
+
+message StatusRes{
+    repeated StatusListing serverStatuses = 1;
+
+message StatusListing{
+    string serverName = 1;
+    int serverActive = 2;   //0 = inactive, 1 = active
+}
