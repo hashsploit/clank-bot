@@ -72,6 +72,11 @@
 			<id>bintray-jcenter</id>
 			<url>https://jcenter.bintray.com</url>
 		</repository>
+		<repository>
+			<id>yoava</id>
+			<name>AOL yoava</name>
+			<url>http://yoava.artifactoryonline.com/yoava/repo</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<!-- https://github.com/DV8FromTheWorld/JDA -->
@@ -133,6 +138,11 @@
 		    <version>6.0.53</version>
 		    <scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>gui.ava</groupId>
+			<artifactId>html2image</artifactId>
+			<version>0.9</version>
+		</dependency>
+		
 	</dependencies>
 </project>

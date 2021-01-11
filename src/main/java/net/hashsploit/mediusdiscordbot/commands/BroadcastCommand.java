@@ -10,12 +10,10 @@ public class BroadcastCommand extends Command {
 	public static final String DESCRIPTION = "Broadcast a message to all users on a specific server.";
 	
 	public BroadcastCommand() {
-		super(COMMAND, DESCRIPTION, true, new TimedHashmap<String,String>());
+		super(COMMAND, DESCRIPTION, true);
 	}
 
 	@Override
 	public void onFire(CommandEvent event) {
 	}
-	
-	
 }

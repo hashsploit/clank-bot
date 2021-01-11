@@ -3,12 +3,14 @@ package net.hashsploit.mediusdiscordbot;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
+import net.hashsploit.mediusdiscordbot.MediusInformationClient;
 
 public class MediusBotConfig {
 	
@@ -16,30 +18,43 @@ public class MediusBotConfig {
 	
 	private JSONObject json;
 	private Level logLevel;
-	private String token;
+	private String discordToken;
 	private String prefix;
-	private HashSet<Long> operators;
+	private ArrayList<Long> operators;
 	private int defaultColor;
-	private HashMap<String, MediusInformationClient> servers;
-	private HashMap<String, String> defaultCommandIcons;
+	private JSONObject commandSettings;
+	private MediusInformationClient MISClient;
+
 	private HashSet<String> faqWords; 
 	
 	public MediusBotConfig(JSONObject json) {
 		this.json = json;
-		
+
 		this.logLevel = Level.valueOf(json.getString("log_level"));
-		this.token = json.getString("token");
+		this.discordToken = json.getString("discord_token");
 		this.prefix = json.getString("prefix");
 		this.defaultColor = json.getInt("default_color");
 
 		// Load operators
-		this.operators = new HashSet<Long>();
+		this.operators = new ArrayList<Long>();
 		final JSONArray jsonOperatorArray = json.getJSONArray("operators");
 		final Iterator<Object> jsonOperatorIterator = jsonOperatorArray.iterator();
 		while (jsonOperatorIterator.hasNext()) {
 			final long id = Long.parseLong(jsonOperatorIterator.next().toString());
 			operators.add(id);
 		}
+
+		// Load command settings
+		this.commandSettings = json.getJSONObject("command_settings");
+
+		// Load medius information client settings
+		final String name = json.getString("name");
+		final String description = json.getString("description");
+		final String address = json.getString("address");
+		final int port = json.getInt("port");
+		final String MISToken = json.getString("mis_token");
+
+		this.MISClient = new MediusInformationClient(name, description, address, port, MISToken);
 
 		// Load faqWords
 		this.faqWords = new HashSet<String>();
@@ -50,41 +65,6 @@ public class MediusBotConfig {
 			faqWords.add(faqWord);
 		}
 
-		//Load default command icons
-		this.defaultCommandIcons = new HashMap<String, String>();
-		final JSONObject jsonDefaultCommandIcons = json.getJSONObject("default_command_icons");
-		final Iterator<String> jsonDefaultCommandIconsNameIter = jsonDefaultCommandIcons.keys();
-			while (jsonDefaultCommandIconsNameIter.hasNext()){
-				final String commandName = jsonDefaultCommandIconsNameIter.next();
-				this.defaultCommandIcons.put(commandName, jsonDefaultCommandIcons.getString(commandName));
-			}
-		// Load Server
-		this.servers = new HashMap<String, MediusInformationClient>();
-		final JSONArray jsonServerArray = json.getJSONArray("servers");
-		final Iterator<Object> jsonServerIterator = jsonServerArray.iterator();
-		while (jsonServerIterator.hasNext()) {
-			final JSONObject jsonServer = new JSONObject(jsonServerIterator.next().toString());
-			final String name = jsonServer.getString("name");
-			final String description = jsonServer.getString("description");
-			final String address = jsonServer.getString("address");
-			final int port = jsonServer.getInt("port");
-			final String token = jsonServer.getString("token");
-			final int color = jsonServer.getInt("color");
-			final String staticStatus = jsonServer.has("static_status") ? jsonServer.getString("static_status") : null;
-
-			//Load specified command icons for server
-			final HashMap<String, String> commandIcons = new HashMap<String,String>();
-			final JSONObject jsonCmdIcons = jsonServer.getJSONObject("command_icons");
-			final Iterator<String> jsonCmdIconsNamesIter = jsonCmdIcons.keys();
-			while (jsonCmdIconsNamesIter.hasNext()){
-				final String commandName = jsonCmdIconsNamesIter.next();
-				commandIcons.put(commandName, jsonCmdIcons.getString(commandName));
-			}
-
-			final MediusInformationClient server = new MediusInformationClient(name, description, address, port, token, color, staticStatus, commandIcons);
-			servers.put(name, server);
-		}
-		
 		logger.info("Configuration loaded.");
 	}
 
@@ -104,12 +84,12 @@ public class MediusBotConfig {
 		this.logLevel = logLevel;
 	}
 
-	public String getToken() {
-		return token;
+	public String getDiscordToken() {
+		return discordToken;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setDiscordToken(String discordToken) {
+		this.discordToken = discordToken;
 	}
 
 	public String getPrefix() {
@@ -128,34 +108,33 @@ public class MediusBotConfig {
 		this.defaultColor = defaultColor;
 	}
 
-	public HashSet<Long> getOperators() {
+	public ArrayList<Long> getOperators() {
 		return operators;
 	}
 
-	public void setOperators(HashSet<Long> operators) {
+	public void setOperators(ArrayList<Long> operators) {
 		this.operators = operators;
 	}
 
-	public HashMap<String,String> getDefaultCommandIcons(){
-		return defaultCommandIcons;
-	}
-	
-	public void setDefaultCommandIcons(HashMap<String, String> defaultCommandIcons){
-		this.defaultCommandIcons = defaultCommandIcons;
-	}
 
 	public HashSet<String> getFaqWords(){ 
 		return this.faqWords; 
 	}
 
-	public void setFaqWords(HashSet<String> faqWords) { this.faqWords = faqWords; }
-
-	public HashMap<String, MediusInformationClient> getServers() {
-		return servers;
+	public void setFaqWords(HashSet<String> faqWords) { 
+		this.faqWords = faqWords; 
 	}
 
-	public void setServers(HashMap<String, MediusInformationClient> servers) {
-		this.servers = servers;
+	public MediusInformationClient getMISClient() {
+		return this.MISClient;
+	}
+
+	public void setMISClient(MediusInformationClient MISClient) {
+		this.MISClient = MISClient;
+	}
+
+	public JSONObject getCommandSettings(){
+		return commandSettings;
 	}
 	
 }

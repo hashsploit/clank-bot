@@ -12,7 +12,7 @@ public class ClearCommand extends Command {
 	private boolean isWorking;
 	
 	public ClearCommand() {
-		super(COMMAND, DESCRIPTION, true, new TimedHashmap<String,String>());
+		super(COMMAND, DESCRIPTION, true);
 		isWorking = false;
 	}
 

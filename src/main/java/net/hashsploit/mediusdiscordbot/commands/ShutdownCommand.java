@@ -11,7 +11,7 @@ public class ShutdownCommand extends Command {
 	public static final String DESCRIPTION = "Shutdown the Bot";
 	
 	public ShutdownCommand() {
-		super(COMMAND, DESCRIPTION, true, new TimedHashmap<String,String>());
+		super(COMMAND, DESCRIPTION, true);
 	}
 	
 	@Override

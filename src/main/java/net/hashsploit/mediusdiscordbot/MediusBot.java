@@ -17,6 +17,7 @@ import net.hashsploit.mediusdiscordbot.commands.ClearCommand;
 import net.hashsploit.mediusdiscordbot.commands.HelpCommand;
 import net.hashsploit.mediusdiscordbot.commands.ShutdownCommand;
 import net.hashsploit.mediusdiscordbot.commands.StatusCommand;
+import net.hashsploit.mediusdiscordbot.commands.PlayersCommand;
 import net.hashsploit.mediusdiscordbot.MediusInformationClient;
 
 public class MediusBot {
@@ -56,10 +57,11 @@ public class MediusBot {
 		commands.add(new ShutdownCommand());
 		commands.add(new ClearCommand());
 		commands.add(new StatusCommand());
+		commands.add(new PlayersCommand());
 
 		// Initialize JDA
 		try {
-			jda = JDABuilder.createLight(config.getToken())
+			jda = JDABuilder.createLight(config.getDiscordToken())
 				// Enable automatic clean-up
 				.setEnableShutdownHook(true)
 				// Enable the bulk delete event

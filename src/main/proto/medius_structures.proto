@@ -4,6 +4,8 @@ option java_package = "net.hashsploit.mediusdiscordbot.proto";
 
 service MediusInformation{
     rpc GetStatus(StatusReq) returns (StatusRes) {}
+    rpc GetPlayers(PlayersReq) returns (TableData){}
+    // rpc GetPlayerInfo(PlayerInfoReq) returns (PlayersOnlineRes){}
 }
 
 
@@ -12,10 +14,48 @@ message StatusListing{
     bool serverActive = 2;
 }
 
-message StatusReq{
-    string serverName = 1;
-}
+message StatusReq{}
 
 message StatusRes{
     repeated StatusListing serverStatuses = 1;
+}
+
+message PlayersReq{}
+
+message TableRow{
+    repeated string values = 1;
+}
+
+message TableData{
+    TableRow headers = 1;
+    repeated TableRow rows = 2;
+}
+
+message PlayerStatus{
+    string playerName = 1;
+    string status = 2;
+}
+
+message PlayersRes{
+    // repeated string onlinePlayers = 1;
+    repeated PlayerStatus onlinePlayers = 1;
+}
+
+message PlayerInfoReq{
+    string playerName = 1;
+}
+
+message PlayerInfoRes{
+    string playerName = 1;
+    bool status = 2;
+    string clan = 3;
+    int32 overallRank = 4;
+    int32 skillLevel = 5;
+    int32 gamesPlayed = 6;
+    int32 wins = 7;
+    int32 losses = 8;
+    int32 kills = 9;
+    int32 deaths = 10;
+    int32 nodesTaken = 11;
+    int32 squats = 12;
 }

@@ -13,6 +13,9 @@ import net.hashsploit.mediusdiscordbot.proto.MediusStructures.StatusReq;
 import net.hashsploit.mediusdiscordbot.proto.MediusStructures.StatusRes;
 import net.hashsploit.mediusdiscordbot.proto.MediusStructures.StatusListing;
 
+import net.hashsploit.mediusdiscordbot.proto.MediusStructures.PlayersReq;
+import net.hashsploit.mediusdiscordbot.proto.MediusStructures.TableData;
+
 
 public class MediusInformationClient{
 
@@ -24,27 +27,21 @@ public class MediusInformationClient{
 	private final String description;
 	private final String address;
 	private final int port;
-	private final String token;
-	private final int color;
-	private String staticStatus;
-    private final HashMap<String,String> commandIcons;
+	private final String MISToken;
     
-    public MediusInformationClient(final String name, final String description, final String address, final int port, final String token, final int color, final String staticStatus ,final HashMap<String, String> commandIcons) {
+    public MediusInformationClient(final String name, final String description, final String address, final int port, final String MISToken) {
 		this.name = name;
 		this.description = description;
 		this.address = address;
 		this.port = port;
-		this.token = token;
-		this.color = color;
-		this.staticStatus = staticStatus;
-        this.commandIcons = commandIcons;
+		this.MISToken = MISToken;
 
         this.grpcChannel = ManagedChannelBuilder.forTarget(String.format("%s:%s", address, Integer.toString(port))).usePlaintext().build();
         this.blockingStub = MediusInformationGrpc.newBlockingStub(this.grpcChannel);
 	}
 
     /**
-	 * Get the Medius JQM server name.
+	 * Get the MIS name.
 	 * @return
 	 */
 	public String getName() {
@@ -52,7 +49,7 @@ public class MediusInformationClient{
 	}
 
 	/**
-	 * Get the Medius JQM server description.
+	 * Get the MIS description.
 	 * @return
 	 */
 	public String getDescription() {
@@ -60,7 +57,7 @@ public class MediusInformationClient{
 	}
 
 	/**
-	 * Get the Medius JQM server address.
+	 * Get the MIS address.
 	 * @return
 	 */
 	public String getAddress() {
@@ -68,7 +65,7 @@ public class MediusInformationClient{
 	}
 
 	/**
-	 * Get the Medius JQM server port.
+	 * Get the MIS server port.
 	 * @return
 	 */
 	public int getPort() {
@@ -76,34 +73,12 @@ public class MediusInformationClient{
 	}
 
 	/**
-	 * Get the Medius JQM server token.
+	 * Get the MIS token.
 	 * @return
 	 */
-	public String getToken() {
-		return token;
+	public String getMISToken() {
+		return MISToken;
 	}
-
-	/**
-	 * Get the server color.
-	 * @return
-	 */
-	public int getColor() {
-		return color;
-	}
-
-	/**
-	 * Get the Medius JQM static status message.
-	 */
-	public String getStaticStatus(){
-		return staticStatus;
-	}
-	
-	/**
-	 * Get the Medius JQM server command icons.
-	 */
-	public HashMap<String, String> getCommandIcons(){
-		return commandIcons;
-    }
 
     //
     //
@@ -116,6 +91,18 @@ public class MediusInformationClient{
 
         try{
             grpcRes = this.blockingStub.getStatus(req);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return grpcRes;
+	}
+	
+	public TableData GetPlayers(PlayersReq req){
+        TableData grpcRes = null;
+
+        try{
+            grpcRes = this.blockingStub.getPlayers(req);
         } catch(Exception e){
             e.printStackTrace();
         }
