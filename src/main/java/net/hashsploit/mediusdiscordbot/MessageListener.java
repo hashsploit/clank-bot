@@ -22,6 +22,8 @@ public class MessageListener extends ListenerAdapter {
 		boolean isMention = event.getMessage().getContentDisplay().startsWith("@" + event.getJDA().getSelfUser().getName());
 		boolean usesPrefix = event.getMessage().getContentRaw().startsWith(MediusBot.getInstance().getConfig().getPrefix());
 
+		System.out.println(usesPrefix);
+
 		// Log PM's and exit
 		if (isFromPM) {
 			logger.info(String.format("[PM] %s: %s\n", event.getAuthor().getName(), event.getMessage().getContentDisplay()));
@@ -47,8 +49,8 @@ public class MessageListener extends ListenerAdapter {
 		if (usesPrefix) {
 			final String message = event.getMessage().getContentDisplay().split(MediusBot.getInstance().getConfig().getPrefix())[1];
 			final String[] parts = message.split(" ");
-			final String command = parts[0];
-			final String[] args = Arrays.copyOfRange(parts, 1, parts.length);
+			final String command = parts[1];
+			final String[] args = Arrays.copyOfRange(parts, 2, parts.length);
 			
 			handleCommand(event, command, args);
 		}

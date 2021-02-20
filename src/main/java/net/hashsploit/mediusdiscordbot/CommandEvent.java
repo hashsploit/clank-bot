@@ -1,6 +1,7 @@
 package net.hashsploit.mediusdiscordbot;
 
 import java.util.List;
+import java.io.InputStream;
 
 import org.json.JSONObject;
 
@@ -8,6 +9,9 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 public class CommandEvent {
 
@@ -37,6 +41,24 @@ public class CommandEvent {
 	 */
 	public void reply(MessageEmbed embed) {
 		this.channel.sendMessage(embed).complete();
+	}
+
+	/**
+	 * Send a fancy reply to the same channel as issuer, adding an image attachment.
+	 * @param embed
+	 * @param fileName
+	 * @param uploadName
+	 */
+	public void replyWithImage(MessageEmbed embed, String fileName, String uploadName){
+		InputStream file;
+        try{
+            file = new FileInputStream(new File(fileName));
+        } catch(Exception e){ 
+            System.out.println(e.getMessage());
+            file = null;
+		}
+		
+		this.channel.sendFile(file, uploadName).embed(embed).complete();
 	}
 
 	/**

@@ -1,37 +1,42 @@
 {
     "log_level": "INFO",
-    "token": "",
-    "prefix": "!",
-    "operators": [000000000000000000, 123456789012345678],
-    "default_color": 13158600,
-    "default_command_icons": {
-        "help": "https://i.imgur.com/uLdPtjc.png",
-        "status": "https://i.imgur.com/Yo0Efh2.png"
-    },
-    "servers": [
-        {
-            "name": "dl",
-            "description": "Deadlocked",
-            "address": "127.0.0.1",
-            "port": 10093,
-            "token": "super secret token",
-            "color": 8912896,
-            "command_icons": {
-                "status": "https://i.imgur.com/N0AhWfe.png"
-            }
+    "discord_token": "secret-discord-token",
+    "mis_token": "super secret token",
+    "prefix": "!dl",
+    "name": "Deadlocked",
+    "operators": [12341234, 45674567],
+    "address": "127.0.0.1",
+    "port": 10093,
+    "description": "Deadlocked",
+    "default_color": 8912896,
+    "faq_words": [],
+    "command_settings": {
+        "help": {
+            "icon": "https://imgur.com/MpPza1h.png"
         },
-        {
-            "name": "uya",
-            "description": "Up Your Arsenal",
-            "address": "127.0.0.1",
-            "port": 10093,
-            "token": "super secret token",
-            "color": 16755200,
-            "command_icons": {
-                "status": "https://i.imgur.com/nc2eE2s.png"
-            },
-            "static_status": "Server is currently under development."
+        "status": {
+            "icon": "https://imgur.com/3gboyNT.png"
+        },
+        "players": {
+            "icon": "https://i.imgur.com/baztqW2.png",
+            "statuses": {
+                "In Game" :{
+                    "priority": 0,
+                    "color": "#f71b1b"
+                },
+                "Staging": {
+                    "priority": 1,
+                    "color": "#fcb838"
+                },
+                "Lobby":{
+                    "priority": 2,
+                    "color": "#1bf747"
+                },
+                "Online": {
+                    "priority": 3,
+                    "color": "#1bf747"
+                }
+            }
         }
-    ],
-    "faq_words": ["server", "servers", "ready", "when"]
+    }
 }

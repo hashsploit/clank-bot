@@ -4,6 +4,7 @@ import net.hashsploit.mediusdiscordbot.Pair;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.lang.NullPointerException;
+import java.time.Duration;
 
 public class TimedHashmap <K,V> {
     private HashMap<K, Pair<LocalDateTime,V>> hashmap;
@@ -35,8 +36,8 @@ public class TimedHashmap <K,V> {
             return false;
         }
 
-        LocalDateTime currTime = hashmap.get(key).getFirst();
+        LocalDateTime prevTime = hashmap.get(key).getFirst();
 
-        return currTime.plusSeconds(this.expireSeconds).isBefore(LocalDateTime.now());
+        return Duration.between(prevTime, LocalDateTime.now()).getSeconds() < expireSeconds;
     }
 }
